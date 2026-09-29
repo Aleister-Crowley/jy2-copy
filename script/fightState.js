@@ -167,7 +167,10 @@ var fightState=function(game){
                             var 禁止的武学UI = 禁止的武学UI组.create(42+i*42, 424, 'fight_not');
                             禁止的武学UI.inputEnabled = true;
                             禁止的武学UI.alpha = 0.3;
-                            this.解封的武学UI.frame = 我方对象.所有武学[类型][i].图标;
+                            if(!JY2.ArtRegistry.applySkill(this.解封的武学UI,我方对象.所有武学[类型][i].名称,38)){
+                                this.解封的武学UI.loadTexture('fight_ui');
+                                this.解封的武学UI.frame = 我方对象.所有武学[类型][i].图标;
+                            }
                             this.解封的武学UI.inputEnabled = true;
                         }
                         else
@@ -657,10 +660,12 @@ var fightState=function(game){
                     for (let i = 0; i < 6; i++) {
                         var 格子 = game.add.button(42+i*42, 424, 'fight_gird');
                         药品格子.add(格子);
-                        var 丹药 = game.add.image(42+i*42, 424, 'item'+item['o_item'][i+16].名称);
-                        丹药.名称 = item['o_item'][i+16].名称;
-                        丹药.数量 = item['o_item'][i+16].数量;
-                        丹药.药物效果 = item['o_item'][i+16].药物效果;
+                        var 丹药数据 = item['o_item'][i+16];
+                        var 丹药 = game.add.image(42+i*42, 424, 'item'+丹药数据.名称);
+                        JY2.ArtRegistry.applyItem(丹药,丹药数据,38);
+                        丹药.名称 = 丹药数据.名称;
+                        丹药.数量 = 丹药数据.数量;
+                        丹药.药物效果 = 丹药数据.药物效果;
                         药品格子.add(丹药);
                         丹药.inputEnabled = true;
                         丹药.events.onInputDown.add(function(丹药){
@@ -809,10 +814,14 @@ var fightState=function(game){
             游戏数据[0]['对手'][k] = story_[剧情].对手[k];
         } */
         
-        敌人头像.loadTexture(`head${敌方对象.头像.toString(16).substring(4)}`);
-        主角头像.loadTexture(`head${我方对象.头像.toString(16).substring(4)}`);
-        敌人头像.width = 56; 敌人头像.height = 56;
-        主角头像.width = 56; 主角头像.height = 56;
+        if(!JY2.ArtRegistry.applyPortrait(敌人头像,敌方对象.名称 || '对手',56)){
+            敌人头像.loadTexture(`head${敌方对象.头像.toString(16).substring(4)}`);
+            敌人头像.width = 56; 敌人头像.height = 56;
+        }
+        if(!JY2.ArtRegistry.applyPortrait(主角头像,我方对象.姓名 || '主角',56)){
+            主角头像.loadTexture(`head${我方对象.头像.toString(16).substring(4)}`);
+            主角头像.width = 56; 主角头像.height = 56;
+        }
         敌人名称文本.text = 敌方对象.名称 || '对手';
         主角名称文本.text = 我方对象.姓名 || '主角';
         /////////////////////////////////////
