@@ -101,31 +101,41 @@ onload=function(){
 					//console.log(this.name);
 				},head);
 			}
-			var dialog_box = game.add.image(0,0,'dialog_UI');
-			dialog_box.y = game.height - dialog_box.height;
-			var dialog_box_head = game.add.image(0,0,'head0001');
-			dialog_box_head.scale.setTo(-1,1);
-			dialog_box_head.x -= dialog_box_head.width*1.15;
-			dialog_box_head.y = game.height - dialog_box_head.height * 1.4;
-			var dialog_box_name = game.add.text(0,0,'',{fill:'white',fontSize:21});
-			dialog_box_name.x = dialog_box_head.x * 1.1;
-			dialog_box_name.y = dialog_box.y * 1.03;
-			var dialog_box_text = game.add.text(0,0,'',{fill:'black',fontSize:16});
-			dialog_box_text.x = dialog_box_head.x * 1.1;
-			dialog_box_text.y = dialog_box.y * 1.12;
+			var dialog_box = game.add.graphics(18,game.height - 136);
+			dialog_box.beginFill(0xfff2d2,0.97);
+			dialog_box.lineStyle(3,0x9a6b34,1);
+			dialog_box.drawRoundedRect(0,0,564,118,12);
+			dialog_box.endFill();
+
+			var dialog_portrait_frame = game.add.graphics(24,game.height - 166);
+			dialog_portrait_frame.beginFill(0x203847,0.98);
+			dialog_portrait_frame.lineStyle(3,0xd3a458,1);
+			dialog_portrait_frame.drawRoundedRect(0,0,92,92,12);
+			dialog_portrait_frame.endFill();
+
+			var dialog_box_head = game.add.image(30,game.height - 160,'head0001');
+			dialog_box_head.width = 80;
+			dialog_box_head.height = 80;
+
+			var dialog_name_plate = game.add.graphics(116,game.height - 151);
+			dialog_name_plate.beginFill(0x203847,0.98);
+			dialog_name_plate.lineStyle(2,0xd3a458,1);
+			dialog_name_plate.drawRoundedRect(0,0,112,28,8);
+			dialog_name_plate.endFill();
+
+			var dialog_box_name = game.add.text(172,game.height - 137,'',{
+				fill:'#f7ecd2',fontSize:14,fontWeight:'bold'
+			});
+			dialog_box_name.anchor.setTo(0.5);
+
+			var dialog_box_text = game.add.text(132,game.height - 112,'',{
+				fill:'#3b2a1f',fontSize:14,wordWrap:true,wordWrapWidth:426,lineSpacing:4
+			});
 			dialog_box_name.text = '云行深';
 			dialog_box_text.text = '你个庸医！';
-			// var dialog_box_option_1 = game.add.text(0,0,'',{fill:'black',fontSize:16});
-			// dialog_box_option_1.x = dialog_box_head.x * 1.1;
-			// dialog_box_option_1.y = dialog_box.y * 1.12;
-			// var dialog_box_option_2 = game.add.text(0,0,'',{fill:'black',fontSize:16});
-			// dialog_box_option_2.x = dialog_box_head.x * 1.1;
-			// dialog_box_option_2.y = dialog_box.y * 1.18; // 1.12 1.18 1.24 三个选项的纵坐标
-			// dialog_box_option_1.inputEnabled = true;
-			// dialog_box_option_2.inputEnabled = true;
 			var dialog_box_select = [];
 			for(let i=0;i<5;i++){
-				dialog_box_select[i] = game.add.text(dialog_box_head.x * 1.1,dialog_box.y * 1.105 + i * 16,i,{fill:'black',fontSize:16});
+				dialog_box_select[i] = game.add.text(132,game.height - 108 + i * 18,i,{fill:'#3b2a1f',fontSize:13});
 				dialog_box_select[i].inputEnabled = true;
 				dialog_box_select[i].events.onInputDown.add(function(){
 					if(剧情名称=='剧情_衡阳武馆馆主' && 场景索引==0){
@@ -193,6 +203,8 @@ onload=function(){
 			dialog_UI.add(bg);
 			dialog_UI.add(heads);
 			dialog_UI.add(dialog_box);
+			dialog_UI.add(dialog_portrait_frame);
+			dialog_UI.add(dialog_name_plate);
 			dialog_UI.add(dialog_box_head);
 			dialog_UI.add(dialog_box_name);
 			dialog_UI.add(dialog_box_text);
