@@ -21,7 +21,7 @@ var loaderState=function(game){
             game.load.image('head' + headList[i],`./images/head/${headList[i]}.png`);
         }
         for (let i = 0; i < mp3List.length; i++) {
-            game.load.audio('mp3' + mp3List[i],`./audio/${mapList[i]}.mp3`);
+            game.load.audio('mp3' + mp3List[i],`./audio/${mp3List[i]}.mp3`);
         }
         item['o_item'].forEach(function(item){
             var num = parseInt(item.图标).toString(16).substring(4);
@@ -73,21 +73,14 @@ var loaderState=function(game){
            
         }
         game.load.atlas(playerData.名称,playerData.url.png, playerData.url.json);
-        for (let i = 0; i < playerData.所有武学.拳.length; i++) {
-            game.load.atlas(playerData.所有武学.拳[i].名称,playerData.所有武学.拳[i].url.png, playerData.所有武学.拳[i].url.json);
-        }
-        for (let i = 0; i < playerData.所有武学.掌.length; i++) {
-            game.load.atlas(playerData.所有武学.掌[i].名称,playerData.所有武学.掌[i].url.png, playerData.所有武学.掌[i].url.json);
-        }
-        for (let i = 0; i < playerData.所有武学.指.length; i++) {
-            game.load.atlas(playerData.所有武学.指[i].名称,playerData.所有武学.指[i].url.png, playerData.所有武学.指[i].url.json);
-        }
-        for (let i = 0; i < playerData.所有武学.剑.length; i++) {
-            game.load.atlas(playerData.所有武学.剑[i].名称,playerData.所有武学.剑[i].url.png, playerData.所有武学.剑[i].url.json);
-        }
-        for (let i = 0; i < playerData.所有武学.内.length; i++) {
-            game.load.atlas(playerData.所有武学.内[i].名称,playerData.所有武学.内[i].url.png, playerData.所有武学.内[i].url.json);
-        }
+        // 按注册表中的武学类别动态加载资源。
+        JY2.KungfuRegistry.getTypes().forEach(function(type){
+            JY2.KungfuRegistry.getAll(type).forEach(function(skill){
+                if (skill.url && skill.url.png && skill.url.json) {
+                    game.load.atlas(skill.名称, skill.url.png, skill.url.json);
+                }
+            });
+        });
 
         game.load.onFileComplete.add(function(progress){															//文件加载进度
             progressText.text=progress+'%';
