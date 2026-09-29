@@ -814,11 +814,11 @@ var fightState=function(game){
             游戏数据[0]['对手'][k] = story_[剧情].对手[k];
         } */
         
-        if(!JY2.ArtRegistry.applyPortrait(敌人头像,敌方对象.名称 || '对手',56)){
+        if(!JY2.ArtRegistry.applyPortrait(敌人头像,敌方对象.名称 || '对手',56,敌方对象.头像)){
             敌人头像.loadTexture(`head${敌方对象.头像.toString(16).substring(4)}`);
             敌人头像.width = 56; 敌人头像.height = 56;
         }
-        if(!JY2.ArtRegistry.applyPortrait(主角头像,我方对象.姓名 || '主角',56)){
+        if(!JY2.ArtRegistry.applyPortrait(主角头像,我方对象.姓名 || '主角',56,我方对象.头像)){
             主角头像.loadTexture(`head${我方对象.头像.toString(16).substring(4)}`);
             主角头像.width = 56; 主角头像.height = 56;
         }
