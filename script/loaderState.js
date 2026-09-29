@@ -52,6 +52,10 @@ var loaderState=function(game){
         game.load.image('hd_battle_forest','./images/hd/battle/forest.jpg');
         game.load.image('hd_battle_courtyard','./images/hd/battle/courtyard.jpg');
         game.load.image('hd_battle_outskirts','./images/hd/battle/outskirts.jpg');
+        // Q版高清头像 / 武功 / 物品精灵表
+        game.load.spritesheet('hd_portraits','./images/hd/sheets/portraits.png',256,256,16);
+        game.load.spritesheet('hd_skill_icons','./images/hd/sheets/skills.png',128,128,20);
+        game.load.spritesheet('hd_item_icons','./images/hd/sheets/items.png',128,128,20);
 
         game.load.image('bgImage','./images/UI/bg/0010.png');
         game.load.image('logo_buff','./images/UI/logos/logo_buff.png');
