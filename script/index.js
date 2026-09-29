@@ -1240,7 +1240,7 @@ onload=function(){
 						heads.children[i].alpha = 1;
 					}
 					立绘图片[i] = 立绘图片[i].toString(16).substring(4);
-					if(!JY2.ArtRegistry.applyPortrait(heads.children[i],立绘名称[i],160)){
+					if(!JY2.ArtRegistry.applyPortrait(heads.children[i],立绘名称[i],160,立绘图片[i])){
 						heads.children[i].loadTexture(`head${立绘图片[i]}`);
 					}
 					heads.children[i].name = 立绘名称[i];
@@ -1250,7 +1250,7 @@ onload=function(){
 					dialog_UI.alpha = 0;
 				}else{
 					var 对话框姓名 = story_[剧情][场景索引].对话框姓名;
-					if(!JY2.ArtRegistry.applyPortrait(dialog_box_head,对话框姓名,80)){
+					if(!JY2.ArtRegistry.applyPortrait(dialog_box_head,对话框姓名,80,对话框头像)){
 						dialog_box_head.loadTexture(`head${对话框头像}`);
 						dialog_box_head.width = 80;
 						dialog_box_head.height = 80;
