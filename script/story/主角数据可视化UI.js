@@ -812,7 +812,7 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                 break;
                                 case 4:
                                     console.log('存档');
-                                    //记录当前剧情名称、场景索引、主角数据以及经历过且不可重复的剧情即可
+                                    JY2.SaveUI.show(game, 'save');
                                     break;
                                     case 5:
                                         console.log('退出游戏，回到主界面');
