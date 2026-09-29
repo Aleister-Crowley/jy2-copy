@@ -19,8 +19,10 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
 
     // 新版头像：直接放进左侧金边头像框。
     var 主角头像 = game.add.image(29,17,'head'+主角头像图片);
-    主角头像.width = 68;
-    主角头像.height = 68;
+    if(!JY2.ArtRegistry.applyPortrait(主角头像,游戏数据[0].主角.姓名,68)){
+        主角头像.width = 68;
+        主角头像.height = 68;
+    }
     主角属性窗口UI.add(主角头像);
 
     var 主角名称 = game.add.text(112,12,游戏数据[0].主角.姓名,{
@@ -203,7 +205,10 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                             解封的武学名称[i] = game.add.text(武学招式窗口.x + 60, 武学招式窗口.y + Math.floor(i/1)*40 + 40,'');
                                             解封的武学名称组.add(解封的武学名称[i]);
                                             if (我方对象.可用武学[类型][i]!==''&&我方对象.可用武学[类型][i].可用) {
-                                                解封的武学UI.frame = 我方对象.所有武学[类型][i].图标;
+                                                if(!JY2.ArtRegistry.applySkill(解封的武学UI,我方对象.所有武学[类型][i].名称,34)){
+                                                    解封的武学UI.loadTexture('fight_ui');
+                                                    解封的武学UI.frame = 我方对象.所有武学[类型][i].图标;
+                                                }
                                                 解封的武学名称[i].text = 我方对象.可用武学[类型][i].名称;
                                                 kungfu['o_kungfu'].forEach(function(item){
                                                     if(item.名称 == 我方对象.可用武学[类型][i].名称){
@@ -217,7 +222,10 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                         }else{
                                             解封的武学UI组.getChildAt(i).loadTexture('fight_ui');
                                             if (我方对象.可用武学[类型][i]!==''&&我方对象.可用武学[类型][i].可用) {
-                                                解封的武学UI组.getChildAt(i).frame = 我方对象.所有武学[类型][i].图标;
+                                                if(!JY2.ArtRegistry.applySkill(解封的武学UI组.getChildAt(i),我方对象.所有武学[类型][i].名称,34)){
+                                                    解封的武学UI组.getChildAt(i).loadTexture('fight_ui');
+                                                    解封的武学UI组.getChildAt(i).frame = 我方对象.所有武学[类型][i].图标;
+                                                }
                                                 解封的武学名称[i].text = 我方对象.可用武学[类型][i].名称;
                                                 kungfu['o_kungfu'].forEach(function(item){
                                                     if(item.名称 == 我方对象.可用武学[类型][i].名称){
@@ -455,6 +463,7 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                 item['o_item'].forEach(function(item,i){
                                     //if (item.名称!=='空' && item.名称!=='生死符') {
                                         _item = bags.create(i%4*50 + 10,Math.floor(i/4)*55 + 55,'item' + item.名称);
+                                        JY2.ArtRegistry.applyItem(_item,item,42);
                                         var UI对应名称 = game.add.text(_item.x,_item.y+39,item.名称,{fontSize:9});
                                         if (UI对应名称.text=='空') UI对应名称.visible=false;
                                         var 已装备标记 = game.add.text(_item.x,_item.y + 10,'已装备',{fontSize:12,fill:'red'});
@@ -700,6 +709,7 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                 item['o_item'].forEach(function(item,i){
                                     if(i>=48){		
                                         mjtp = 秘籍图谱.create(i%4*52 + 18,Math.floor(i/4)*58 - 12 * 58 + 62,'item' + item.名称);
+                                        JY2.ArtRegistry.applyItem(mjtp,item,42);
                                         var 名称UI = game.add.text(mjtp.x,mjtp.y+40,item.名称,{fontSize:12});
                                         秘籍名称.add(名称UI);
                                         mjtp.tag = item.名称;
