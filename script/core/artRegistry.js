@@ -5,6 +5,23 @@
 (function(global){
     var JY2 = global.JY2 = global.JY2 || {};
 
+    var portraitIdFrames = {
+        '0001':0,  // 主角：青年侠客
+        '0002':9,  // 商贾/掌柜
+        '0005':5,  // 老者/高人
+        '0006':6,  // 僧人
+        '0007':13, // 粗犷武人
+        '0008':11, // 江湖浪人
+        '0009':4,  // 中年掌门/武师
+        '000a':7,  // 道门/儒雅长者
+        '000b':2,  // 青年弟子
+        '000c':12, // 官兵/护卫
+        '000d':11, // 江湖客
+        '000e':15, // 女侠/贵女
+        '000f':0,  // 青年侠客
+        '0010':5   // 老前辈
+    };
+
     var exactPortraits = {
         '云行深':0,
         '主角':0,
@@ -138,7 +155,17 @@
         '易筋经':7
     };
 
-    function portraitFrame(name){
+    function normalizeHeadId(headId){
+        if(headId===null || typeof(headId)==='undefined') return '';
+        if(typeof(headId)==='number'){
+            return (headId & 0xffff).toString(16).padStart(4,'0');
+        }
+        var value = String(headId).toLowerCase().replace(/^0x/,'');
+        if(value.length>4) value=value.slice(-4);
+        return value.padStart(4,'0');
+    }
+
+    function portraitFrame(name,headId){
         name = name || '';
         if (Object.prototype.hasOwnProperty.call(exactPortraits,name)) {
             return exactPortraits[name];
@@ -147,6 +174,10 @@
             if(portraitRules[i][0].test(name)){
                 return portraitRules[i][1];
             }
+        }
+        var id = normalizeHeadId(headId);
+        if(id && Object.prototype.hasOwnProperty.call(portraitIdFrames,id)){
+            return portraitIdFrames[id];
         }
         return null;
     }
@@ -171,8 +202,8 @@
         }
     }
 
-    function applyPortrait(sprite,name,size){
-        var frame=portraitFrame(name);
+    function applyPortrait(sprite,name,size,headId){
+        var frame=portraitFrame(name,headId);
         if(frame===null || !sprite) return false;
         sprite.loadTexture('hd_portraits',frame);
         sprite.frame=frame;
@@ -209,6 +240,7 @@
 
     JY2.ArtRegistry={
         portraitFrame:portraitFrame,
+        normalizeHeadId:normalizeHeadId,
         skillFrame:skillFrame,
         itemFrame:itemFrame,
         applyPortrait:applyPortrait,
