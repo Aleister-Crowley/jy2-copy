@@ -7,41 +7,90 @@
 var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 场景界面
 
     var 主角属性窗口UI = game.add.group();
-    var 主角属性窗口 = game.add.image(10,5,'0041');
-    主角属性窗口.scale.setTo(1);
+    var 主角属性窗口 = game.add.image(8,5,'hd_player_panel');
     主角属性窗口UI.add(主角属性窗口);
+
     var 主角头像图片 = '';
     if(typeof(story_[剧情名称][场景索引].主角头像)=='undefined'){
-        主角头像图片 = '0001';//0x56020001
+        主角头像图片 = '0001';
     }else{
         主角头像图片 = story_[剧情名称][场景索引].主角头像.toString(16).substring(4);
     }
-    var 主角头像 = game.add.image(0,0,'head'+主角头像图片);
-    //var 主角头像 = game.add.image(0,0,'head'+story_[剧情名称][场景索引].主角头像.toString(16).substring(4));
-    主角头像.scale.setTo(-0.5,0.5);
-    主角头像.x = -主角头像.width;
-    主角头像.y = 43;
-    主角头像.anchor.setTo(0.5);
+
+    // 新版头像：直接放进左侧金边头像框。
+    var 主角头像 = game.add.image(29,17,'head'+主角头像图片);
+    主角头像.width = 68;
+    主角头像.height = 68;
     主角属性窗口UI.add(主角头像);
-    var 主角名称 = game.add.text(76,15,游戏数据[0].主角.姓名,{fill:'white',fontSize:12});
-    var 主角称号 = game.add.text(130,16.5,游戏数据[0].主角.称号,{fontSize:12});
-    var 主角生命 = game.add.text(70,36,'生命',{fontSize:12});
-    var 主角内力 = game.add.text(70,48,'内力',{fontSize:12});
-    var 主角经验 = game.add.text(70,60,'经验',{fontSize:12});
-    var 主角生命条 = game.add.image(75+主角生命.width,38,'0082');
-    主角生命条.scale.setTo(1.3,0.5);
-    var 主角内力条 = game.add.image(75+主角内力.width,50,'0083');
-    主角内力条.scale.setTo(1.3,0.5);
-    var 主角经验条 = game.add.image(75+主角经验.width,62,'0084');
-    主角经验条.scale.setTo(1.3,0.5);
+
+    var 主角名称 = game.add.text(112,12,游戏数据[0].主角.姓名,{
+        fill:'#f8f0d8',
+        fontSize:14,
+        fontWeight:'bold'
+    });
+    var 主角称号 = game.add.text(202,14,游戏数据[0].主角.称号,{
+        fill:'#f2dfb8',
+        fontSize:10
+    });
+
+    var 主角生命 = game.add.text(113,42,'生命',{fill:'#3d2b20',fontSize:10});
+    var 主角内力 = game.add.text(113,59,'内力',{fill:'#3d2b20',fontSize:10});
+    var 主角经验 = game.add.text(113,76,'经验',{fill:'#3d2b20',fontSize:10});
+
+    function 创建状态条(x,y,color){
+        var bg = game.add.graphics(x,y);
+        bg.beginFill(0x40382e,0.30);
+        bg.drawRoundedRect(0,0,91,8,4);
+        bg.endFill();
+
+        var fill = game.add.graphics(x,y);
+        fill.beginFill(color,1);
+        fill.drawRoundedRect(0,0,91,8,4);
+        fill.endFill();
+
+        主角属性窗口UI.add(bg);
+        主角属性窗口UI.add(fill);
+        return fill;
+    }
+
+    var 主角生命条 = 创建状态条(145,44,0x62c95b);
+    var 主角内力条 = 创建状态条(145,61,0x4aa7e8);
+    var 主角经验条 = 创建状态条(145,78,0xe2b84d);
+
+    var 主角生命值 = game.add.text(240,40,'',{fill:'#3a2a20',fontSize:9});
+    var 主角内力值 = game.add.text(240,57,'',{fill:'#3a2a20',fontSize:9});
+    var 主角经验值 = game.add.text(240,74,'',{fill:'#3a2a20',fontSize:9});
+
     主角属性窗口UI.add(主角名称);
     主角属性窗口UI.add(主角称号);
     主角属性窗口UI.add(主角生命);
     主角属性窗口UI.add(主角内力);
     主角属性窗口UI.add(主角经验);
-    主角属性窗口UI.add(主角生命条);
-    主角属性窗口UI.add(主角内力条);
-    主角属性窗口UI.add(主角经验条);
+    主角属性窗口UI.add(主角生命值);
+    主角属性窗口UI.add(主角内力值);
+    主角属性窗口UI.add(主角经验值);
+
+    // 顶部 HUD 保持动态：扣血、加内力、升级后无需重新进入场景。
+    主角属性窗口.update = function(){
+        var role = 游戏数据[0].主角;
+        var hpMax = Math.max(1,Number(role.生命上限)||1);
+        var mpMax = Math.max(1,Number(role.内力上限)||1);
+        var expMax = Math.max(1,Number(role.经验上限)||1);
+        var hp = Math.max(0,Number(role.生命)||0);
+        var mp = Math.max(0,Number(role.内力)||0);
+        var exp = Math.max(0,Number(role.经验)||0);
+
+        主角名称.text = role.姓名 || '';
+        主角称号.text = role.称号 || '';
+        主角生命条.scale.x = Math.max(0,Math.min(1,hp/hpMax));
+        主角内力条.scale.x = Math.max(0,Math.min(1,mp/mpMax));
+        主角经验条.scale.x = Math.max(0,Math.min(1,exp/expMax));
+        主角生命值.text = hp + '/' + hpMax;
+        主角内力值.text = mp + '/' + mpMax;
+        主角经验值.text = exp + '/' + expMax;
+    };
+    主角属性窗口.update();
+
     //当前值/上限值
     var 选项卡_切换 = [];
     var 人物属性窗口UI;
@@ -852,8 +901,25 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                     break;
             }
         }
-        var tabUI = game.add.button(10 + i % 6 * 202/6, 主角属性窗口.y+主角属性窗口.height, '0042', 选项卡_切换[i], this, i, i, i);
-        场景容器UI.add(tabUI);
+        var 选项卡资源 = ['hd_menu_role','hd_menu_kungfu','hd_menu_bag','hd_menu_book','hd_menu_save','hd_menu_leave'];
+        var tabUI = game.add.button(
+            10 + i * 50,
+            主角属性窗口.y + 主角属性窗口.height + 3,
+            选项卡资源[i],
+            选项卡_切换[i],
+            this
+        );
+        tabUI.width = 48;
+        tabUI.height = 58;
+        tabUI.events.onInputOver.add(function(btn){
+            btn.alpha = 0.86;
+            btn.y -= 2;
+        },this);
+        tabUI.events.onInputOut.add(function(btn){
+            btn.alpha = 1;
+            btn.y = 主角属性窗口.y + 主角属性窗口.height + 3;
+        },this);
+        主角属性窗口UI.add(tabUI);
         
     }
 }
