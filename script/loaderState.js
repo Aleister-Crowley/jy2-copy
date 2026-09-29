@@ -27,6 +27,14 @@ var loaderState=function(game){
             var num = parseInt(item.图标).toString(16).substring(4);
             game.load.image('item' + item.名称,`./images/item/${num}.png`);
         }); 
+        // Q版高清衡阳城资源
+        game.load.image('hd_hengyang_map','./images/hd/hengyang_map.jpg');
+        game.load.image('hd_hengyang_liufu','./images/hd/hengyang_liufu.png');
+        game.load.image('hd_hengyang_wuguan','./images/hd/hengyang_wuguan.png');
+        game.load.image('hd_hengyang_yiguan','./images/hd/hengyang_yiguan.png');
+        game.load.image('hd_hengyang_kezhan','./images/hd/hengyang_kezhan.png');
+        game.load.image('hd_hengyang_likai','./images/hd/hengyang_likai.png');
+
         game.load.image('bgImage','./images/UI/bg/0010.png');
         game.load.image('logo_buff','./images/UI/logos/logo_buff.png');
         game.load.atlas('logo', './images/UI/logos/logo.png', './images/UI/logos/logo.json');
