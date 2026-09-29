@@ -1248,6 +1248,8 @@ onload=function(){
 					dialog_UI.alpha = 0;
 				}else{
 					dialog_box_head.loadTexture(`head${对话框头像}`);
+					dialog_box_head.width = 80;
+					dialog_box_head.height = 80;
 					var 对话框姓名 = story_[剧情][场景索引].对话框姓名;
 					dialog_box_name.text = 对话框姓名;
 					var 对话框对白 = story_[剧情][场景索引].对话框对白;
