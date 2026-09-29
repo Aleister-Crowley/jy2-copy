@@ -34,6 +34,14 @@ var loaderState=function(game){
         game.load.image('hd_hengyang_yiguan','./images/hd/hengyang_yiguan.png');
         game.load.image('hd_hengyang_kezhan','./images/hd/hengyang_kezhan.png');
         game.load.image('hd_hengyang_likai','./images/hd/hengyang_likai.png');
+        // Q版主角状态面板与系统菜单
+        game.load.image('hd_player_panel','./images/hd/ui/player_panel.png');
+        game.load.image('hd_menu_role','./images/hd/ui/menu_role.png');
+        game.load.image('hd_menu_kungfu','./images/hd/ui/menu_kungfu.png');
+        game.load.image('hd_menu_bag','./images/hd/ui/menu_bag.png');
+        game.load.image('hd_menu_book','./images/hd/ui/menu_book.png');
+        game.load.image('hd_menu_save','./images/hd/ui/menu_save.png');
+        game.load.image('hd_menu_leave','./images/hd/ui/menu_leave.png');
 
         game.load.image('bgImage','./images/UI/bg/0010.png');
         game.load.image('logo_buff','./images/UI/logos/logo_buff.png');
