@@ -13,7 +13,14 @@ var fightState=function(game){
         };
         
         var 战斗界面 = game.add.group();
-        var 背景图像 = game.add.image(0,0,'hd_battle_forest');
+        var 战斗背景Key = 'hd_battle_forest';
+        var 当前战斗场景 = (typeof(所处场景)!=='undefined' && 所处场景) ? 所处场景 : '';
+        if(/华山|少林|武当|嵩山|明教|黑木崖|天龙寺|侠客岛/.test(当前战斗场景)){
+            战斗背景Key = 'hd_battle_courtyard';
+        }else if(/衡阳|襄阳|福威镖局|聚贤庄|万劫谷/.test(当前战斗场景)){
+            战斗背景Key = 'hd_battle_outskirts';
+        }
+        var 背景图像 = game.add.image(0,0,战斗背景Key);
         背景图像.width = game.width;
         背景图像.height = game.height;
 
