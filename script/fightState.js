@@ -13,112 +13,117 @@ var fightState=function(game){
         };
         
         var 战斗界面 = game.add.group();
-        var 背景图像 = game.add.image(0,0,'map1001');
+        var 背景图像 = game.add.image(0,0,'hd_battle_forest');
         背景图像.width = game.width;
         背景图像.height = game.height;
 
-        var 敌人可视化数据UI = game.add.group();
-        var 敌人头像框 = game.add.image(0,0,'fight_ui');
-        敌人头像框.frame = 82;
-        敌人头像框.scale.setTo(0.7,1);
-        var 敌人头像 = game.add.image(23,24,'head0057');
-        敌人头像.scale.set(0.55,0.85);
-        var 敌人血力槽 = game.add.image(0,0,'fight_ui');
-        敌人血力槽.frame = 83;
-        敌人血力槽.scale.setTo(0.5,1);
-        敌人血力槽.x = 敌人头像框.x + 敌人头像框.width*0.84;
-        敌人血力槽.y = 敌人头像框.height * 0.12;
-        var 敌人血条 = game.add.image(0,0,'fight_ui');
-        敌人血条.frame = 84;
-        敌人血条.scale.setTo(0.5,1);
-        敌人血条.x = 敌人头像框.x + 敌人头像框.width*0.85;
-        敌人血条.y = 41;
-        var 敌人血条值 = 敌人血条.width;
-        var 敌人蓝条 = game.add.image(0,0,'fight_ui');
-        敌人蓝条.frame = 85;
-        敌人蓝条.scale.setTo(0.5,1);
-        敌人蓝条.x = 敌人头像框.x + 敌人头像框.width*0.85;
-        敌人蓝条.y = 65;
-        var 敌人蓝条值 = 敌人蓝条.width;
-        var 敌人生命文本框 = game.add.text(敌人血条.x,敌人血条.y,'敌人生命/敌人生命上限',{fill:'white',fontSize:12});
-        var 敌人内力文本框 = game.add.text(敌人蓝条.x,敌人蓝条.y,'敌人内力/敌人内力上限',{fill:'white',fontSize:12});
-        var 敌人行动速度槽 = game.add.image(0,0,'fight_ui');
-        敌人行动速度槽.frame = 27;
-        敌人行动速度槽.scale.setTo(.59,.7);
-        敌人行动速度槽.tint = 0xeeeee;
-        敌人行动速度槽.x = 90;
-        敌人行动速度槽.y = 105;
-        var 敌人行动速度条 = game.add.image(0,0,'fight_ui');
-        敌人行动速度条.frame = 27;
-        敌人行动速度条.scale.setTo(.58,.4);
-        敌人行动速度条.tint = 0xff0000;
-        敌人行动速度条.x = 90;
-        敌人行动速度条.y = 107;
-        var 敌人行动进度值 = 敌人行动速度条.width;
-        敌人行动速度条.width = 0;
-        敌人可视化数据UI.add(敌人头像框);
-        敌人可视化数据UI.add(敌人头像);
-        敌人可视化数据UI.add(敌人血力槽);
-        敌人可视化数据UI.add(敌人血条);
-        敌人可视化数据UI.add(敌人蓝条);
-        敌人可视化数据UI.add(敌人生命文本框);
-        敌人可视化数据UI.add(敌人内力文本框);
-        敌人可视化数据UI.add(敌人行动速度槽);
-        敌人可视化数据UI.add(敌人行动速度条);
-
         var 我方对象 = 游戏数据[0].主角;
-        
-        var 主角可视化数据UI = game.add.group();
-        var 主角头像框 = game.add.image(0,0,'fight_ui');
-        主角头像框.frame = 82;
-        主角头像框.scale.setTo(0.7,1);
-        var 主角头像 = game.add.image(23,24,'head0001');
-        主角头像.scale.set(0.55,0.85);
-        var 主角血力槽 = game.add.image(0,0,'fight_ui');
-        主角血力槽.frame = 83;
-        主角血力槽.scale.setTo(0.5,1);
-        主角血力槽.x = 主角头像框.x + 主角头像框.width*0.84;
-        主角血力槽.y = 主角头像框.height * 0.12;
-        var 主角血条 = game.add.image(0,0,'fight_ui');
-        主角血条.frame = 84;
-        主角血条.scale.setTo(0.5,1);
-        主角血条.x = 主角头像框.x + 主角头像框.width*0.85;
-        主角血条.y = 41;
-        var 主角血条值 = 主角血条.width;
-        var 主角蓝条 = game.add.image(0,0,'fight_ui');
-        主角蓝条.frame = 85;
-        主角蓝条.scale.setTo(0.5,1);
-        主角蓝条.x = 主角头像框.x + 主角头像框.width*0.85;
-        主角蓝条.y = 65;
-        var 主角蓝条值 = 主角蓝条.width;
-        var 主角生命文本框 = game.add.text(主角血条.x+143,主角血条.y,'主角生命/主角生命上限',{fill:'white',fontSize:12});
-        var 主角内力文本框 = game.add.text(主角蓝条.x+143,主角蓝条.y,'主角内力/主角内力上限',{fill:'white',fontSize:12});
-        主角生命文本框.scale.setTo(-1,1);
-        主角内力文本框.scale.setTo(-1,1);
-        主角可视化数据UI.add(主角头像框);
-        主角可视化数据UI.add(主角头像);
-        主角可视化数据UI.add(主角血力槽);
-        主角可视化数据UI.add(主角血条);
-        主角可视化数据UI.add(主角蓝条);
-        主角可视化数据UI.add(主角生命文本框);
-        主角可视化数据UI.add(主角内力文本框);
-        主角可视化数据UI.scale.setTo(-1,1);
-        主角可视化数据UI.x = game.width;
-        if (我方对象.生命 < 0) {
-            我方对象.生命 = 0;
+
+        function 创建战斗状态框(x,y,portraitKey){
+            var group = game.add.group();
+            var panel = game.add.graphics(x,y);
+            panel.beginFill(0x203847,0.94);
+            panel.lineStyle(2,0xd3a458,1);
+            panel.drawRoundedRect(0,0,178,92,10);
+            panel.endFill();
+
+            var portraitFrame = game.add.graphics(x+7,y+7);
+            portraitFrame.beginFill(0x172a35,1);
+            portraitFrame.lineStyle(2,0xd3a458,1);
+            portraitFrame.drawRoundedRect(0,0,62,62,8);
+            portraitFrame.endFill();
+
+            var portrait = game.add.image(x+10,y+10,portraitKey);
+            portrait.width = 56;
+            portrait.height = 56;
+            var nameText = game.add.text(x+78,y+8,'',{fill:'#f5e6c6',fontSize:12,fontWeight:'bold'});
+
+            function makeBg(by,h){
+                var g = game.add.graphics(x+78,y+by);
+                g.beginFill(0x0f1820,0.72);
+                g.drawRoundedRect(0,0,88,h,h/2);
+                g.endFill();
+                return g;
+            }
+            var hpBg = makeBg(31,10);
+            var mpBg = makeBg(50,10);
+            var hp = game.add.graphics(x+78,y+31);
+            hp.beginFill(0x62c95b,1); hp.drawRoundedRect(0,0,88,10,5); hp.endFill();
+            var mp = game.add.graphics(x+78,y+50);
+            mp.beginFill(0x4aa7e8,1); mp.drawRoundedRect(0,0,88,10,5); mp.endFill();
+
+            var hpText = game.add.text(x+80,y+30,'',{fill:'#ffffff',fontSize:8});
+            var mpText = game.add.text(x+80,y+49,'',{fill:'#ffffff',fontSize:8});
+            var speedBg = makeBg(70,6);
+            var speed = game.add.graphics(x+78,y+70);
+            speed.beginFill(0xe5b84d,1); speed.drawRoundedRect(0,0,88,6,3); speed.endFill();
+            speed.width = 0;
+
+            [panel,portraitFrame,portrait,nameText,hpBg,mpBg,hp,mp,hpText,mpText,speedBg,speed].forEach(function(o){
+                group.add(o);
+            });
+            return {group:group,portraitFrame:portraitFrame,portrait:portrait,nameText:nameText,
+                hpBg:hpBg,mpBg:mpBg,hp:hp,mp:mp,hpText:hpText,mpText:mpText,speedBg:speedBg,speed:speed};
         }
+
+        var 主角状态 = 创建战斗状态框(12,12,'head0001');
+        var 敌人状态 = 创建战斗状态框(game.width - 190,12,'head0057');
+
+        var 主角可视化数据UI = 主角状态.group;
+        var 主角头像框 = 主角状态.portraitFrame;
+        var 主角头像 = 主角状态.portrait;
+        var 主角血力槽 = 主角状态.hpBg;
+        var 主角血条 = 主角状态.hp;
+        var 主角蓝条 = 主角状态.mp;
+        var 主角生命文本框 = 主角状态.hpText;
+        var 主角内力文本框 = 主角状态.mpText;
+        var 主角名称文本 = 主角状态.nameText;
+        var 主角血条值 = 88;
+        var 主角蓝条值 = 88;
+
+        var 敌人可视化数据UI = 敌人状态.group;
+        var 敌人头像框 = 敌人状态.portraitFrame;
+        var 敌人头像 = 敌人状态.portrait;
+        var 敌人血力槽 = 敌人状态.hpBg;
+        var 敌人血条 = 敌人状态.hp;
+        var 敌人蓝条 = 敌人状态.mp;
+        var 敌人生命文本框 = 敌人状态.hpText;
+        var 敌人内力文本框 = 敌人状态.mpText;
+        var 敌人名称文本 = 敌人状态.nameText;
+        var 敌人行动速度槽 = 敌人状态.speedBg;
+        var 敌人行动速度条 = 敌人状态.speed;
+        var 敌人血条值 = 88;
+        var 敌人蓝条值 = 88;
+        var 敌人行动进度值 = 88;
+
+        if (我方对象.生命 < 0) 我方对象.生命 = 0;
+        if (我方对象.内力 < 0) 我方对象.内力 = 0;
         主角生命文本框.text = `${我方对象.生命}/${我方对象.生命上限}`;
-        主角血条.width = 主角血条值 * (我方对象.生命/我方对象.生命上限);
-        if (我方对象.内力<0) {
-            我方对象.内力 = 0;
-        }
-        主角蓝条.width = 主角蓝条值 * (我方对象.内力/我方对象.内力上限);
         主角内力文本框.text = `${我方对象.内力}/${我方对象.内力上限}`;
+        主角血条.width = 主角血条值 * (我方对象.生命/我方对象.生命上限);
+        主角蓝条.width = 主角蓝条值 * (我方对象.内力/我方对象.内力上限);
 
         var 主角行动可视化数据UI = game.add.group();
-        var 底座 = game.add.image(0,0,'fight_ui');
-        底座.frame = 26;
-        底座.y = game.height - 底座.height * 1.1;
+        var 底座 = game.add.graphics(20,game.height - 100);
+        底座.beginFill(0x203847,0.94);
+        底座.lineStyle(2,0xd3a458,1);
+        底座.drawRoundedRect(0,0,560,88,12);
+        底座.endFill();
+
+        function 创建战斗按钮外观(x,y,w,h,label,active){
+            var g = game.add.graphics(x,y);
+            g.beginFill(active ? 0xf2b84b : 0x2d4656,0.97);
+            g.lineStyle(2,0xd3a458,1);
+            g.drawRoundedRect(0,0,w,h,8);
+            g.endFill();
+            var tx = game.add.text(x+w/2,y+h/2,label,{
+                fill:active ? '#3a2819' : '#f5e6c6',
+                fontSize:12,fontWeight:'bold'
+            });
+            tx.anchor.setTo(0.5);
+            主角行动可视化数据UI.add(g);
+            主角行动可视化数据UI.add(tx);
+        }
         var 拳_切换 = function(){
             武学类型切换('拳');
         }
@@ -150,8 +155,8 @@ var fightState=function(game){
                     if (我方对象.可用武学[类型][i]!==''&&我方对象.可用武学[类型][i].可用) { //这里是用的一个一个生成图标  但是我需要6个一次生成 5个武功种类
 
                         if(解封的武学UI组.length < 30){//第二个办法 限制生成的个数【避免生成太多个【禁止】图标黑掉】
-                            this.解封的武学UI = 解封的武学UI组.create(game.width*0.089+i*42.45, game.height *0.88, 'fight_ui');
-                            var 禁止的武学UI = 禁止的武学UI组.create(game.width*0.089+i*42.45, game.height *0.88, 'fight_not');
+                            this.解封的武学UI = 解封的武学UI组.create(42+i*42, 424, 'fight_ui');
+                            var 禁止的武学UI = 禁止的武学UI组.create(42+i*42, 424, 'fight_not');
                             禁止的武学UI.inputEnabled = true;
                             禁止的武学UI.alpha = 0.3;
                             this.解封的武学UI.frame = 我方对象.所有武学[类型][i].图标;
@@ -165,8 +170,8 @@ var fightState=function(game){
                             禁止的武学UI组.children.forEach(function(UI){
                                 UI.destroy();
                             });
-                            this.解封的武学UI = 解封的武学UI组.create(game.width*0.089+i*42.45, game.height *0.88, 'fight_ui');
-                            var 禁止的武学UI = 禁止的武学UI组.create(game.width*0.089+i*42.45, game.height *0.88, 'fight_not');
+                            this.解封的武学UI = 解封的武学UI组.create(42+i*42, 424, 'fight_ui');
+                            var 禁止的武学UI = 禁止的武学UI组.create(42+i*42, 424, 'fight_not');
                             禁止的武学UI.inputEnabled = true;
                             禁止的武学UI.alpha = 0.3;
                             this.解封的武学UI.frame = 我方对象.所有武学[类型][i].图标;
@@ -438,10 +443,10 @@ var fightState=function(game){
                             //console.log('进行武学招式攻击');
                         },this);
                     }else{//武学不可用时 武学将被封印
-                        var 解封的武学UI = 解封的武学UI组.create(game.width*0.089+i*42.45, game.height *0.88, 'fight_ui');
+                        var 解封的武学UI = 解封的武学UI组.create(42+i*42, 424, 'fight_ui');
                         解封的武学UI.frame = 10;
                         解封的武学UI.inputEnabled = true;
-                        var 禁止的武学UI = 禁止的武学UI组.create(game.width*0.089+i*42.45, game.height *0.88, 'fight_not');
+                        var 禁止的武学UI = 禁止的武学UI组.create(42+i*42, 424, 'fight_not');
                         禁止的武学UI.inputEnabled = true;
                         禁止的武学UI.alpha = 0.5;
                     }
@@ -450,11 +455,19 @@ var fightState=function(game){
                 解封的武学UI组.children[i].frame = 10;
             }
         }
-        var 拳_按钮 = game.add.button(game.width*0.2, game.height *0.81, 'fight_ui', 拳_切换, this, 51, 50, 51);
-        var 掌_按钮 = game.add.button(game.width*0.24, game.height *0.81, 'fight_ui', 掌_切换, this, 53, 52, 53);
-        var 指_按钮 = game.add.button(game.width*0.28, game.height *0.81, 'fight_ui', 指_切换, this, 55, 54, 55);
-        var 剑_按钮 = game.add.button(game.width*0.32, game.height *0.81, 'fight_ui', 剑_切换, this, 7,56, 7);
-        var 内_按钮 = game.add.button(game.width*0.36, game.height *0.81, 'fight_ui', 内_切换, this, 9, 8, 9);
+        var 拳_按钮 = game.add.button(116,390,'fight_ui',拳_切换,this,51,50,51);
+        var 掌_按钮 = game.add.button(158,390,'fight_ui',掌_切换,this,53,52,53);
+        var 指_按钮 = game.add.button(200,390,'fight_ui',指_切换,this,55,54,55);
+        var 剑_按钮 = game.add.button(242,390,'fight_ui',剑_切换,this,7,56,7);
+        var 内_按钮 = game.add.button(284,390,'fight_ui',内_切换,this,9,8,9);
+        [拳_按钮,掌_按钮,指_按钮,剑_按钮,内_按钮].forEach(function(btn){
+            btn.alpha = 0.01; btn.width = 40; btn.height = 24;
+        });
+        创建战斗按钮外观(116,390,40,24,'拳',true);
+        创建战斗按钮外观(158,390,40,24,'掌',false);
+        创建战斗按钮外观(200,390,40,24,'指',false);
+        创建战斗按钮外观(242,390,40,24,'剑',false);
+        创建战斗按钮外观(284,390,40,24,'内',false);
         var 封印的武学 = function(){
             
         }
@@ -462,7 +475,7 @@ var fightState=function(game){
         var 解封的武学UI组 = game.add.group();
         var 禁止的武学UI组 = game.add.group();//应该只生成六个图标而不是与解封组一同生成【覆盖覆盖黑加黑】
         for (let i = 0; i < 6; i++) {
-            var 封印的武学UI = game.add.button(game.width*0.089+i*42.45, game.height *0.88, 'fight_ui', 封印的武学, this, 10, 10, 10);
+            var 封印的武学UI = game.add.button(42+i*42, 424, 'fight_ui', 封印的武学, this, 10, 10, 10);
             封印的武学UI组.add(封印的武学UI);
         }
         var 逃跑 = function(){
@@ -485,7 +498,9 @@ var fightState=function(game){
                 }
             },this);
         }
-        var 逃跑图标 = game.add.button(game.width*0.026, game.height *0.854, 'fight_ui', 逃跑, this, 81, 80, 81);
+        var 逃跑图标 = game.add.button(500,424,'fight_ui',逃跑,this,81,80,81);
+        逃跑图标.alpha=0.01; 逃跑图标.width=68; 逃跑图标.height=34;
+        创建战斗按钮外观(500,424,68,34,'逃跑',false);
         var 信息弹窗 = function(){
             console.log(`弹出角色数据信息窗口`);
             var 人物属性窗口UI,人物属性窗口;
@@ -621,7 +636,9 @@ var fightState=function(game){
                 人物属性窗口.inputEnabled = true;
             }
         }
-        var 信息图标 = game.add.button(game.width*0.112, game.height *0.747, 'fight_ui', 信息弹窗, this, 79, 78, 79);
+        var 信息图标 = game.add.button(428,424,'fight_ui',信息弹窗,this,79,78,79);
+        信息图标.alpha=0.01; 信息图标.width=68; 信息图标.height=34;
+        创建战斗按钮外观(428,424,68,34,'状态',false);
         var 显示药品格子 = false;
         var 药品格子 = game.add.group();
         var 切换内容 = function(){
@@ -630,9 +647,9 @@ var fightState=function(game){
             if(显示药品格子){
                 if(药品格子.length<1){
                     for (let i = 0; i < 6; i++) {
-                        var 格子 = game.add.button(game.width*0.089+i*42.45, game.height *0.88, 'fight_gird');
+                        var 格子 = game.add.button(42+i*42, 424, 'fight_gird');
                         药品格子.add(格子);
-                        var 丹药 = game.add.image(game.width*0.089+i*42.45, game.height *0.88, 'item'+item['o_item'][i+16].名称);
+                        var 丹药 = game.add.image(42+i*42, 424, 'item'+item['o_item'][i+16].名称);
                         丹药.名称 = item['o_item'][i+16].名称;
                         丹药.数量 = item['o_item'][i+16].数量;
                         丹药.药物效果 = item['o_item'][i+16].药物效果;
@@ -664,7 +681,9 @@ var fightState=function(game){
                 药品格子.visible = false;
             }
         }
-        var 切换图标 = game.add.button(game.width*0.42, game.height *0.805, 'fight_ui', 切换内容, this, 77, 24, 77);
+        var 切换图标 = game.add.button(356,424,'fight_ui',切换内容,this,77,24,77);
+        切换图标.alpha=0.01; 切换图标.width=68; 切换图标.height=34;
+        创建战斗按钮外观(356,424,68,34,'物品',false);
         var 普攻攻击 = function(){
             敌方进度条行进 = false;
             audio = game.add.audio(`mp30001`);
@@ -696,12 +715,19 @@ var fightState=function(game){
             主角行动速度条.width = 0;
             我方进行攻击 = true;
         }
-        var 普攻图标 = game.add.button(game.width*0.53, game.height *0.885, 'fight_ui', 普攻攻击, this, 23, 22, 23);
-        var 主角行动速度条  = game.add.image(0,0,'fight_ui');
-        主角行动速度条.frame = 27;
-        主角行动速度条.x = 45;
-        主角行动速度条.y = 569;
-        var 我方行动进度值 = 主角行动速度条.width;
+        var 普攻图标 = game.add.button(284,424,'fight_ui',普攻攻击,this,23,22,23);
+        普攻图标.alpha=0.01; 普攻图标.width=68; 普攻图标.height=34;
+        创建战斗按钮外观(284,424,68,34,'攻击',true);
+        var 主角行动速度槽 = game.add.graphics(42,414);
+        主角行动速度槽.beginFill(0x0f1820,0.72);
+        主角行动速度槽.drawRoundedRect(0,0,220,6,3);
+        主角行动速度槽.endFill();
+        var 主角行动速度条 = game.add.graphics(42,414);
+        主角行动速度条.beginFill(0xe5b84d,1);
+        主角行动速度条.drawRoundedRect(0,0,220,6,3);
+        主角行动速度条.endFill();
+        var 我方行动进度值 = 220;
+        主角行动速度条.width = 0;
         主角行动可视化数据UI.add(底座);
         主角行动可视化数据UI.add(拳_按钮);
         主角行动可视化数据UI.add(掌_按钮);
@@ -715,6 +741,7 @@ var fightState=function(game){
         主角行动可视化数据UI.add(封印的武学UI组);
         主角行动可视化数据UI.add(解封的武学UI组);
         主角行动可视化数据UI.add(禁止的武学UI组);
+        主角行动可视化数据UI.add(主角行动速度槽);
         主角行动可视化数据UI.add(主角行动速度条);
         战斗界面.add(背景图像);
         战斗界面.add(敌人可视化数据UI);
@@ -776,6 +803,10 @@ var fightState=function(game){
         
         敌人头像.loadTexture(`head${敌方对象.头像.toString(16).substring(4)}`);
         主角头像.loadTexture(`head${我方对象.头像.toString(16).substring(4)}`);
+        敌人头像.width = 56; 敌人头像.height = 56;
+        主角头像.width = 56; 主角头像.height = 56;
+        敌人名称文本.text = 敌方对象.名称 || '对手';
+        主角名称文本.text = 我方对象.姓名 || '主角';
         /////////////////////////////////////
         敌人 = 战斗界面.create(敌方对象.坐标.x,敌方对象.坐标.y,敌方对象.名称);
         敌人.anchor.setTo(0.5);
@@ -926,16 +957,16 @@ var fightState=function(game){
         var t = 0;
         var 我方行动进度分成100份 = 我方行动进度值*0.01;
         //主角蓝条.width = 主角蓝条值 * (我方对象.内力/我方对象.内力上限);
-        var 禁止普攻 = game.add.image(0,0,'fight_ui');
+        var 禁止普攻 = game.add.graphics(普攻图标.x,普攻图标.y);
+        禁止普攻.beginFill(0x111111,0.55);
+        禁止普攻.drawRoundedRect(0,0,68,34,8);
+        禁止普攻.endFill();
         主角行动可视化数据UI.add(禁止普攻);
-        禁止普攻.frame = 21;
-        禁止普攻.x = 普攻图标.x;
-        禁止普攻.y = 普攻图标.y;
-        var 禁止逃跑 = game.add.image(0,0,'fight_ui');
+        var 禁止逃跑 = game.add.graphics(逃跑图标.x,逃跑图标.y);
+        禁止逃跑.beginFill(0x111111,0.55);
+        禁止逃跑.drawRoundedRect(0,0,68,34,8);
+        禁止逃跑.endFill();
         主角行动可视化数据UI.add(禁止逃跑);
-        禁止逃跑.frame = 95;
-        禁止逃跑.x = 逃跑图标.x;
-        禁止逃跑.y = 逃跑图标.y;
         我方攻击控制器 = game.time.events.loop(Phaser.Timer.SECOND * 0.1, function(){//封禁图标 预先创建六个即可 然后在此根据集气与内力判断是否显示【封禁】
             主角行动速度条.width =  我方行动进度分成100份 * t;
             if (我方进行攻击) {
