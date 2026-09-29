@@ -19,7 +19,7 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
 
     // 新版头像：直接放进左侧金边头像框。
     var 主角头像 = game.add.image(29,17,'head'+主角头像图片);
-    if(!JY2.ArtRegistry.applyPortrait(主角头像,游戏数据[0].主角.姓名,68)){
+    if(!JY2.ArtRegistry.applyPortrait(主角头像,游戏数据[0].主角.姓名,68,主角头像图片)){
         主角头像.width = 68;
         主角头像.height = 68;
     }
