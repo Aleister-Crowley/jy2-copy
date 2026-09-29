@@ -38,7 +38,10 @@
             var icon = game.add.image(btn.x + btn.width * 0.1,btn.y,引导按钮[i].图标.toString(16).substring(4));
             var text = game.add.text(icon.x+icon.width,btn.y + 10,引导按钮[i].名称,{fill:'black',fontSize:16});
             if (引导按钮[i].图标==0) {
-                text.x -= 6;
+                // 没有图标的导航按钮（例如“离开”）文字直接在按钮内居中。
+                text.anchor.setTo(0.5);
+                text.x = btn.x + btn.width / 2;
+                text.y = btn.y + btn.height / 2;
             }
             城市界面UI.add(btn);
             城市界面UI.add(icon);
