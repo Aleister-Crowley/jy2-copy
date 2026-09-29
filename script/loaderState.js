@@ -50,6 +50,8 @@ var loaderState=function(game){
         game.load.image('hd_panel_save','./images/hd/ui/panel_save.png');
         // Q版战斗场景样板
         game.load.image('hd_battle_forest','./images/hd/battle/forest.jpg');
+        game.load.image('hd_battle_courtyard','./images/hd/battle/courtyard.jpg');
+        game.load.image('hd_battle_outskirts','./images/hd/battle/outskirts.jpg');
 
         game.load.image('bgImage','./images/UI/bg/0010.png');
         game.load.image('logo_buff','./images/UI/logos/logo_buff.png');
