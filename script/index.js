@@ -1240,17 +1240,21 @@ onload=function(){
 						heads.children[i].alpha = 1;
 					}
 					立绘图片[i] = 立绘图片[i].toString(16).substring(4);
-					heads.children[i].loadTexture(`head${立绘图片[i]}`);
+					if(!JY2.ArtRegistry.applyPortrait(heads.children[i],立绘名称[i],160)){
+						heads.children[i].loadTexture(`head${立绘图片[i]}`);
+					}
 					heads.children[i].name = 立绘名称[i];
 				}
 				var 对话框头像 = story_[剧情][场景索引].对话框头像.toString(16).substring(4);
 				if (对话框头像=='') {
 					dialog_UI.alpha = 0;
 				}else{
-					dialog_box_head.loadTexture(`head${对话框头像}`);
-					dialog_box_head.width = 80;
-					dialog_box_head.height = 80;
 					var 对话框姓名 = story_[剧情][场景索引].对话框姓名;
+					if(!JY2.ArtRegistry.applyPortrait(dialog_box_head,对话框姓名,80)){
+						dialog_box_head.loadTexture(`head${对话框头像}`);
+						dialog_box_head.width = 80;
+						dialog_box_head.height = 80;
+					}
 					dialog_box_name.text = 对话框姓名;
 					var 对话框对白 = story_[剧情][场景索引].对话框对白;
 					var 对话框选项 = story_[剧情][场景索引].对话框选项;
