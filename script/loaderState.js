@@ -42,6 +42,12 @@ var loaderState=function(game){
         game.load.image('hd_menu_book','./images/hd/ui/menu_book.png');
         game.load.image('hd_menu_save','./images/hd/ui/menu_save.png');
         game.load.image('hd_menu_leave','./images/hd/ui/menu_leave.png');
+        // Q版功能窗口
+        game.load.image('hd_panel_character','./images/hd/ui/panel_character.png');
+        game.load.image('hd_panel_kungfu','./images/hd/ui/panel_kungfu.png');
+        game.load.image('hd_panel_bag','./images/hd/ui/panel_bag.png');
+        game.load.image('hd_panel_book','./images/hd/ui/panel_book.png');
+        game.load.image('hd_panel_save','./images/hd/ui/panel_save.png');
 
         game.load.image('bgImage','./images/UI/bg/0010.png');
         game.load.image('logo_buff','./images/UI/logos/logo_buff.png');
