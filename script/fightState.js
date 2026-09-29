@@ -109,6 +109,7 @@ var fightState=function(game){
         底座.lineStyle(2,0xd3a458,1);
         底座.drawRoundedRect(0,0,560,88,12);
         底座.endFill();
+        主角行动可视化数据UI.add(底座);
 
         function 创建战斗按钮外观(x,y,w,h,label,active){
             var g = game.add.graphics(x,y);
@@ -728,7 +729,7 @@ var fightState=function(game){
         主角行动速度条.endFill();
         var 我方行动进度值 = 220;
         主角行动速度条.width = 0;
-        主角行动可视化数据UI.add(底座);
+        主角行动可视化数据UI.sendToBack(底座);
         主角行动可视化数据UI.add(拳_按钮);
         主角行动可视化数据UI.add(掌_按钮);
         主角行动可视化数据UI.add(指_按钮);
