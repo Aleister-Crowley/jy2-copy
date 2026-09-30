@@ -219,45 +219,9 @@ var menuState = function(game){
                     主角数据初始化();
                 }
                 var 风云再起 = function(){
-                    //console.log('风云再起');
-                    var 存档盒子容器;
-                    if(typeof(存档盒子容器)=='undefined'){
-                        存档盒子容器 = game.add.group();
-                        var 存档盒子 = game.add.image(game.world.centerX,game.world.centerY,'loadOrSaveBox');
-                        存档盒子.scale.setTo(0.7,1);
-                        存档盒子.anchor.setTo(.5);
-                        存档盒子.inputEnabled = true;
-                        var 存档1 = game.add.text(存档盒子.x,存档盒子.y,'记录一 0级 无门派\n',{fontSize:12});
-                        存档1.anchor.setTo(0.5,2.1);
-                        var 存档2 = game.add.text(存档盒子.x,存档盒子.y,'记录二 6级 少林派\n2022.1.7 22:34:45',{fontSize:12});
-                        存档2.anchor.setTo(0.5);
-                        var 存档3 = game.add.text(存档盒子.x,存档盒子.y,'记录三 0级 无门派\n',{fontSize:12});
-                        存档3.anchor.setTo(0.5,-1.25);
-                        var 存档盒子标题 = game.add.text(0,0,'读取记录',{fontSize:21});
-                        存档盒子标题.x = 存档盒子.x;
-                        存档盒子标题.y = 存档盒子.y;
-                        存档盒子标题.anchor.setTo(0.5,4.25);
-                        var 关闭 = function(){
-                            存档盒子容器.alpha = 0;
-                            存档盒子.inputEnabled = false;
-                        }
-                        var 存档盒子按钮 = game.add.button(game.world.centerX, 0, 'sys_btn', 关闭, this, 0, 1, 2);
-                        存档盒子按钮.y = 存档盒子.y + 存档盒子.height*0.5-存档盒子按钮.height*0.9;
-                        存档盒子按钮.anchor.setTo(.5);
-                        var 存档盒子按钮文本 = game.add.text(game.world.centerX,0,'关闭',{fontSize:12,fill:'dimgray'});
-                        存档盒子按钮文本.anchor.setTo(.5);
-                        存档盒子按钮文本.y = 存档盒子按钮.y;
-                        存档盒子容器.add(存档盒子);
-                        存档盒子容器.add(存档盒子标题);
-                        存档盒子容器.add(存档盒子按钮);
-                        存档盒子容器.add(存档盒子按钮文本);
-                        存档盒子容器.add(存档1);
-                        存档盒子容器.add(存档2);
-                        存档盒子容器.add(存档3);
-                    }else{
-                        存档盒子容器.alpha = 1;
-                        存档盒子.inputEnabled = true;
-                    }	
+                    JY2.SaveUI.show(game, 'load', function(){
+                        game.state.start('game');
+                    });
                 }
                 var 群英荟萃 = function(){
                     //console.log('群英荟萃');

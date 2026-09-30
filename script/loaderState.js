@@ -21,12 +21,42 @@ var loaderState=function(game){
             game.load.image('head' + headList[i],`./images/head/${headList[i]}.png`);
         }
         for (let i = 0; i < mp3List.length; i++) {
-            game.load.audio('mp3' + mp3List[i],`./audio/${mapList[i]}.mp3`);
+            game.load.audio('mp3' + mp3List[i],`./audio/${mp3List[i]}.mp3`);
         }
         item['o_item'].forEach(function(item){
             var num = parseInt(item.图标).toString(16).substring(4);
             game.load.image('item' + item.名称,`./images/item/${num}.png`);
         }); 
+        // Q版高清衡阳城资源
+        game.load.image('hd_hengyang_map','./images/hd/hengyang_map.jpg');
+        game.load.image('hd_hengyang_liufu','./images/hd/hengyang_liufu.png');
+        game.load.image('hd_hengyang_wuguan','./images/hd/hengyang_wuguan.png');
+        game.load.image('hd_hengyang_yiguan','./images/hd/hengyang_yiguan.png');
+        game.load.image('hd_hengyang_kezhan','./images/hd/hengyang_kezhan.png');
+        game.load.image('hd_hengyang_likai','./images/hd/hengyang_likai.png');
+        // Q版主角状态面板与系统菜单
+        game.load.image('hd_player_panel','./images/hd/ui/player_panel.png');
+        game.load.image('hd_menu_role','./images/hd/ui/menu_role.png');
+        game.load.image('hd_menu_kungfu','./images/hd/ui/menu_kungfu.png');
+        game.load.image('hd_menu_bag','./images/hd/ui/menu_bag.png');
+        game.load.image('hd_menu_book','./images/hd/ui/menu_book.png');
+        game.load.image('hd_menu_save','./images/hd/ui/menu_save.png');
+        game.load.image('hd_menu_leave','./images/hd/ui/menu_leave.png');
+        // Q版功能窗口
+        game.load.image('hd_panel_character','./images/hd/ui/panel_character.png');
+        game.load.image('hd_panel_kungfu','./images/hd/ui/panel_kungfu.png');
+        game.load.image('hd_panel_bag','./images/hd/ui/panel_bag.png');
+        game.load.image('hd_panel_book','./images/hd/ui/panel_book.png');
+        game.load.image('hd_panel_save','./images/hd/ui/panel_save.png');
+        // Q版战斗场景样板
+        game.load.image('hd_battle_forest','./images/hd/battle/forest.jpg');
+        game.load.image('hd_battle_courtyard','./images/hd/battle/courtyard.jpg');
+        game.load.image('hd_battle_outskirts','./images/hd/battle/outskirts.jpg');
+        // Q版高清头像 / 武功 / 物品精灵表
+        game.load.spritesheet('hd_portraits','./images/hd/sheets/portraits.png',256,256,16);
+        game.load.spritesheet('hd_skill_icons','./images/hd/sheets/skills.png',128,128,20);
+        game.load.spritesheet('hd_item_icons','./images/hd/sheets/items.png',128,128,20);
+
         game.load.image('bgImage','./images/UI/bg/0010.png');
         game.load.image('logo_buff','./images/UI/logos/logo_buff.png');
         game.load.atlas('logo', './images/UI/logos/logo.png', './images/UI/logos/logo.json');
@@ -73,21 +103,14 @@ var loaderState=function(game){
            
         }
         game.load.atlas(playerData.名称,playerData.url.png, playerData.url.json);
-        for (let i = 0; i < playerData.所有武学.拳.length; i++) {
-            game.load.atlas(playerData.所有武学.拳[i].名称,playerData.所有武学.拳[i].url.png, playerData.所有武学.拳[i].url.json);
-        }
-        for (let i = 0; i < playerData.所有武学.掌.length; i++) {
-            game.load.atlas(playerData.所有武学.掌[i].名称,playerData.所有武学.掌[i].url.png, playerData.所有武学.掌[i].url.json);
-        }
-        for (let i = 0; i < playerData.所有武学.指.length; i++) {
-            game.load.atlas(playerData.所有武学.指[i].名称,playerData.所有武学.指[i].url.png, playerData.所有武学.指[i].url.json);
-        }
-        for (let i = 0; i < playerData.所有武学.剑.length; i++) {
-            game.load.atlas(playerData.所有武学.剑[i].名称,playerData.所有武学.剑[i].url.png, playerData.所有武学.剑[i].url.json);
-        }
-        for (let i = 0; i < playerData.所有武学.内.length; i++) {
-            game.load.atlas(playerData.所有武学.内[i].名称,playerData.所有武学.内[i].url.png, playerData.所有武学.内[i].url.json);
-        }
+        // 按注册表中的武学类别动态加载资源。
+        JY2.KungfuRegistry.getTypes().forEach(function(type){
+            JY2.KungfuRegistry.getAll(type).forEach(function(skill){
+                if (skill.url && skill.url.png && skill.url.json) {
+                    game.load.atlas(skill.名称, skill.url.png, skill.url.json);
+                }
+            });
+        });
 
         game.load.onFileComplete.add(function(progress){															//文件加载进度
             progressText.text=progress+'%';

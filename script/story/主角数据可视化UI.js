@@ -7,41 +7,92 @@
 var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 场景界面
 
     var 主角属性窗口UI = game.add.group();
-    var 主角属性窗口 = game.add.image(10,5,'0041');
-    主角属性窗口.scale.setTo(1);
+    var 主角属性窗口 = game.add.image(8,5,'hd_player_panel');
     主角属性窗口UI.add(主角属性窗口);
+
     var 主角头像图片 = '';
     if(typeof(story_[剧情名称][场景索引].主角头像)=='undefined'){
-        主角头像图片 = '0001';//0x56020001
+        主角头像图片 = '0001';
     }else{
         主角头像图片 = story_[剧情名称][场景索引].主角头像.toString(16).substring(4);
     }
-    var 主角头像 = game.add.image(0,0,'head'+主角头像图片);
-    //var 主角头像 = game.add.image(0,0,'head'+story_[剧情名称][场景索引].主角头像.toString(16).substring(4));
-    主角头像.scale.setTo(-0.5,0.5);
-    主角头像.x = -主角头像.width;
-    主角头像.y = 43;
-    主角头像.anchor.setTo(0.5);
+
+    // 新版头像：直接放进左侧金边头像框。
+    var 主角头像 = game.add.image(29,17,'head'+主角头像图片);
+    if(!JY2.ArtRegistry.applyPortrait(主角头像,游戏数据[0].主角.姓名,68,主角头像图片)){
+        主角头像.width = 68;
+        主角头像.height = 68;
+    }
     主角属性窗口UI.add(主角头像);
-    var 主角名称 = game.add.text(76,15,游戏数据[0].主角.姓名,{fill:'white',fontSize:12});
-    var 主角称号 = game.add.text(130,16.5,游戏数据[0].主角.称号,{fontSize:12});
-    var 主角生命 = game.add.text(70,36,'生命',{fontSize:12});
-    var 主角内力 = game.add.text(70,48,'内力',{fontSize:12});
-    var 主角经验 = game.add.text(70,60,'经验',{fontSize:12});
-    var 主角生命条 = game.add.image(75+主角生命.width,38,'0082');
-    主角生命条.scale.setTo(1.3,0.5);
-    var 主角内力条 = game.add.image(75+主角内力.width,50,'0083');
-    主角内力条.scale.setTo(1.3,0.5);
-    var 主角经验条 = game.add.image(75+主角经验.width,62,'0084');
-    主角经验条.scale.setTo(1.3,0.5);
+
+    var 主角名称 = game.add.text(112,12,游戏数据[0].主角.姓名,{
+        fill:'#f8f0d8',
+        fontSize:14,
+        fontWeight:'bold'
+    });
+    var 主角称号 = game.add.text(202,14,游戏数据[0].主角.称号,{
+        fill:'#f2dfb8',
+        fontSize:10
+    });
+
+    var 主角生命 = game.add.text(113,42,'生命',{fill:'#3d2b20',fontSize:10});
+    var 主角内力 = game.add.text(113,59,'内力',{fill:'#3d2b20',fontSize:10});
+    var 主角经验 = game.add.text(113,76,'经验',{fill:'#3d2b20',fontSize:10});
+
+    function 创建状态条(x,y,color){
+        var bg = game.add.graphics(x,y);
+        bg.beginFill(0x40382e,0.30);
+        bg.drawRoundedRect(0,0,91,8,4);
+        bg.endFill();
+
+        var fill = game.add.graphics(x,y);
+        fill.beginFill(color,1);
+        fill.drawRoundedRect(0,0,91,8,4);
+        fill.endFill();
+
+        主角属性窗口UI.add(bg);
+        主角属性窗口UI.add(fill);
+        return fill;
+    }
+
+    var 主角生命条 = 创建状态条(145,44,0x62c95b);
+    var 主角内力条 = 创建状态条(145,61,0x4aa7e8);
+    var 主角经验条 = 创建状态条(145,78,0xe2b84d);
+
+    var 主角生命值 = game.add.text(240,40,'',{fill:'#3a2a20',fontSize:9});
+    var 主角内力值 = game.add.text(240,57,'',{fill:'#3a2a20',fontSize:9});
+    var 主角经验值 = game.add.text(240,74,'',{fill:'#3a2a20',fontSize:9});
+
     主角属性窗口UI.add(主角名称);
     主角属性窗口UI.add(主角称号);
     主角属性窗口UI.add(主角生命);
     主角属性窗口UI.add(主角内力);
     主角属性窗口UI.add(主角经验);
-    主角属性窗口UI.add(主角生命条);
-    主角属性窗口UI.add(主角内力条);
-    主角属性窗口UI.add(主角经验条);
+    主角属性窗口UI.add(主角生命值);
+    主角属性窗口UI.add(主角内力值);
+    主角属性窗口UI.add(主角经验值);
+
+    // 顶部 HUD 保持动态：扣血、加内力、升级后无需重新进入场景。
+    主角属性窗口.update = function(){
+        var role = 游戏数据[0].主角;
+        var hpMax = Math.max(1,Number(role.生命上限)||1);
+        var mpMax = Math.max(1,Number(role.内力上限)||1);
+        var expMax = Math.max(1,Number(role.经验上限)||1);
+        var hp = Math.max(0,Number(role.生命)||0);
+        var mp = Math.max(0,Number(role.内力)||0);
+        var exp = Math.max(0,Number(role.经验)||0);
+
+        主角名称.text = role.姓名 || '';
+        主角称号.text = role.称号 || '';
+        主角生命条.scale.x = Math.max(0,Math.min(1,hp/hpMax));
+        主角内力条.scale.x = Math.max(0,Math.min(1,mp/mpMax));
+        主角经验条.scale.x = Math.max(0,Math.min(1,exp/expMax));
+        主角生命值.text = hp + '/' + hpMax;
+        主角内力值.text = mp + '/' + mpMax;
+        主角经验值.text = exp + '/' + expMax;
+    };
+    主角属性窗口.update();
+
     //当前值/上限值
     var 选项卡_切换 = [];
     var 人物属性窗口UI;
@@ -60,131 +111,72 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                     if(typeof(人物属性窗口UI)=='undefined'){
                         人物属性窗口UI = game.add.group();
                         场景容器UI.add(人物属性窗口UI);
-                        人物属性窗口 = game.add.image(0,0,'0043');
-                        var 姓名 = game.add.text(0,0,游戏数据[0].主角.姓名,{fontSize:12,fill:'white'});
-                        var 等级 = game.add.text(0,0,游戏数据[0].主角.等级,{fontSize:12,fill:'white'});
-                        var 门派 = game.add.text(0,0,游戏数据[0].主角.门派,{fontSize:12,fill:'black'});
-                        var 称号 = game.add.text(0,0,游戏数据[0].主角.称号,{fontSize:12,fill:'black'});
-                        var 生命 = game.add.text(0,0,游戏数据[0].主角.生命||100,{fontSize:12,fill:'white'});
-                        var 内力 = game.add.text(0,0,游戏数据[0].主角.内力||100,{fontSize:12,fill:'white'});
-                        var 生命上限 = game.add.text(0,0,游戏数据[0].主角.生命上限,{fontSize:12,fill:'white'});
-                        var 内力上限 = game.add.text(0,0,游戏数据[0].主角.内力上限,{fontSize:12,fill:'white'});
-                        var 福缘 = game.add.text(0,0,游戏数据[0].主角.福缘,{fontSize:12,fill:'white'});
-                        var 悟性 = game.add.text(0,0,游戏数据[0].主角.悟性,{fontSize:12,fill:'white'});
-                        var 护体 = game.add.text(0,0,游戏数据[0].主角.护体,{fontSize:12,fill:'white'});
-                        var 拳掌 = game.add.text(0,0,游戏数据[0].主角.拳掌,{fontSize:12,fill:'white'});
-                        var 暗器 = game.add.text(0,0,游戏数据[0].主角.暗器,{fontSize:12,fill:'white'});
-                        var 用毒 = game.add.text(0,0,游戏数据[0].主角.用毒,{fontSize:12,fill:'white'});
-                        var 声望 = game.add.text(0,0,游戏数据[0].主角.声望,{fontSize:12,fill:'white'});
-                        var 力道 = game.add.text(0,0,游戏数据[0].主角.力道,{fontSize:12,fill:'white'});
-                        var 身法 = game.add.text(0,0,游戏数据[0].主角.身法,{fontSize:12,fill:'white'});
-                        var 御剑 = game.add.text(0,0,游戏数据[0].主角.御剑,{fontSize:12,fill:'white'});
-                        var 医疗 = game.add.text(0,0,游戏数据[0].主角.医疗,{fontSize:12,fill:'white'});
-                        var 解毒 = game.add.text(0,0,游戏数据[0].主角.解毒,{fontSize:12,fill:'white'});
-                        var 银两 = game.add.text(0,0,游戏数据[0].主角.银两,{fontSize:12,fill:'white'});
-                        var x = game.add.text(0,0,'x',{fill:'red',fontSize:21});
-                        人物属性窗口UI.add(人物属性窗口);
-                        人物属性窗口UI.add(姓名);
-                        人物属性窗口UI.add(等级);
-                        人物属性窗口UI.add(门派);
-                        人物属性窗口UI.add(称号);
-                        人物属性窗口UI.add(生命);
-                        人物属性窗口UI.add(内力);
-                        人物属性窗口UI.add(生命上限);
-                        人物属性窗口UI.add(内力上限);
-                        人物属性窗口UI.add(福缘);
-                        人物属性窗口UI.add(悟性);
-                        人物属性窗口UI.add(护体);
-                        人物属性窗口UI.add(拳掌);
-                        人物属性窗口UI.add(暗器);
-                        人物属性窗口UI.add(用毒);
-                        人物属性窗口UI.add(声望);
-                        人物属性窗口UI.add(力道);
-                        人物属性窗口UI.add(身法);
-                        人物属性窗口UI.add(御剑);
-                        人物属性窗口UI.add(医疗);
-                        人物属性窗口UI.add(解毒);
-                        人物属性窗口UI.add(银两);
-                        人物属性窗口UI.add(x);
+
+                        人物属性窗口 = game.add.image(game.world.centerX - 120,78,'hd_panel_character');
                         人物属性窗口.inputEnabled = true;
                         人物属性窗口.input.enableDrag(false, false);
-                        人物属性窗口.update = function(){
-                            姓名.x = 人物属性窗口.x + 35;
-                            姓名.y = 人物属性窗口.y + 17;
-                            等级.x = 人物属性窗口.x + 140;
-                            等级.y = 人物属性窗口.y + 15;
-                            门派.x = 人物属性窗口.x + 30;
-                            门派.y = 人物属性窗口.y + 40;
-                            称号.x = 人物属性窗口.x + 90;
-                            称号.y = 人物属性窗口.y + 40;
-                            生命.x = 人物属性窗口.x + 60;
-                            生命.y = 人物属性窗口.y + 72;
-                            内力.x = 人物属性窗口.x + 60;
-                            内力.y = 人物属性窗口.y + 90;
-                            生命上限.x = 人物属性窗口.x + 115;
-                            生命上限.y = 人物属性窗口.y + 72;
-                            内力上限.x = 人物属性窗口.x + 115;
-                            内力上限.y = 人物属性窗口.y + 90;
+                        人物属性窗口UI.add(人物属性窗口);
 
-                            福缘.x = 人物属性窗口.x + 70;
-                            福缘.y = 人物属性窗口.y + 115;
-                            悟性.x = 人物属性窗口.x + 70;
-                            悟性.y = 人物属性窗口.y + 135;
-                            护体.x = 人物属性窗口.x + 70;
-                            护体.y = 人物属性窗口.y + 155;
-                            拳掌.x = 人物属性窗口.x + 70;
-                            拳掌.y = 人物属性窗口.y + 175;
-                            暗器.x = 人物属性窗口.x + 70;
-                            暗器.y = 人物属性窗口.y + 195;
-                            用毒.x = 人物属性窗口.x + 70;
-                            用毒.y = 人物属性窗口.y + 215;
-                            
-                            声望.x = 人物属性窗口.x + 145;
-                            声望.y = 人物属性窗口.y + 115;
-                            力道.x = 人物属性窗口.x + 145;
-                            力道.y = 人物属性窗口.y + 135;
-                            身法.x = 人物属性窗口.x + 145;
-                            身法.y = 人物属性窗口.y + 155;
-                            御剑.x = 人物属性窗口.x + 145;
-                            御剑.y = 人物属性窗口.y + 175;
-                            医疗.x = 人物属性窗口.x + 145;
-                            医疗.y = 人物属性窗口.y + 195;
-                            解毒.x = 人物属性窗口.x + 145;
-                            解毒.y = 人物属性窗口.y + 215;
+                        var 人物字段 = [
+                            ['姓名','姓名'],['等级','等级'],['门派','门派'],['称号','称号'],
+                            ['生命','生命'],['内力','内力'],['力道','力道'],['护体','护体'],
+                            ['身法','身法'],['拳掌','拳掌'],['御剑','御剑'],['暗器','暗器'],
+                            ['医疗','医疗'],['用毒','用毒'],['解毒','解毒'],['悟性','悟性'],
+                            ['福缘','福缘'],['声望','声望'],['银两','银两'],['学点','学点']
+                        ];
+                        var 人物文字 = [];
 
-                            银两.x = 人物属性窗口.x + 70;
-                            银两.y = 人物属性窗口.y + 人物属性窗口.height - 25;
-                            
-                            姓名.text = 游戏数据[0].主角.姓名;
-                            等级.text = 游戏数据[0].主角.等级;
-                            门派.text = 游戏数据[0].主角.门派;
-                            称号.text = 游戏数据[0].主角.称号;
-                            生命.text = 游戏数据[0].主角.生命;
-                            内力.text = 游戏数据[0].主角.内力;
-                            生命上限.text = 游戏数据[0].主角.生命上限;
-                            内力上限.text = 游戏数据[0].主角.内力上限;
-                            福缘.text = 游戏数据[0].主角.福缘;
-                            悟性.text = 游戏数据[0].主角.悟性;
-                            护体.text = 游戏数据[0].主角.护体;
-                            拳掌.text = 游戏数据[0].主角.拳掌;
-                            暗器.text = 游戏数据[0].主角.暗器;
-                            用毒.text = 游戏数据[0].主角.用毒;
-                            声望.text = 游戏数据[0].主角.声望;
-                            力道.text = 游戏数据[0].主角.力道;
-                            身法.text = 游戏数据[0].主角.身法;
-                            御剑.text = 游戏数据[0].主角.御剑;
-                            医疗.text = 游戏数据[0].主角.医疗;
-                            解毒.text = 游戏数据[0].主角.解毒;
-                            银两.text = 游戏数据[0].主角.银两;
-
-                            x.x = 人物属性窗口.x + 人物属性窗口.width - x.width - 5;
-                            x.y = 人物属性窗口.y - 5;
-                            x.inputEnabled = true;
-                            x.events.onInputDown.add(function(){
-                                人物属性窗口UI.alpha = 0;
-                                人物属性窗口.inputEnabled = false;
-                            },this);
+                        for(var rf=0; rf<人物字段.length; rf++){
+                            var col = rf % 2;
+                            var row = Math.floor(rf / 2);
+                            var tx = 人物属性窗口.x + 28 + col * 104;
+                            var ty = 人物属性窗口.y + 55 + row * 21;
+                            var label = game.add.text(tx,ty,人物字段[rf][0] + '：',{
+                                fontSize:11,fill:'#6b4a2f'
+                            });
+                            var value = game.add.text(tx + 38,ty,'',{
+                                fontSize:11,fill:'#2d2118',fontWeight:'bold'
+                            });
+                            人物属性窗口UI.add(label);
+                            人物属性窗口UI.add(value);
+                            人物文字.push({
+                                label:label,
+                                value:value,
+                                key:人物字段[rf][1],
+                                col:col,
+                                row:row
+                            });
                         }
+
+                        var 关闭人物 = game.add.text(
+                            人物属性窗口.x + 人物属性窗口.width - 25,
+                            人物属性窗口.y + 11,
+                            '×',
+                            {fill:'#8b2f23',fontSize:20,fontWeight:'bold'}
+                        );
+                        关闭人物.inputEnabled = true;
+                        关闭人物.events.onInputDown.add(function(){
+                            人物属性窗口UI.alpha = 0;
+                            人物属性窗口.inputEnabled = false;
+                        },this);
+                        人物属性窗口UI.add(关闭人物);
+
+                        人物属性窗口.update = function(){
+                            var role = 游戏数据[0].主角;
+                            for(var ri=0; ri<人物文字.length; ri++){
+                                var rowObj = 人物文字[ri];
+                                var tx2 = 人物属性窗口.x + 28 + rowObj.col * 104;
+                                var ty2 = 人物属性窗口.y + 55 + rowObj.row * 21;
+                                rowObj.label.x = tx2;
+                                rowObj.label.y = ty2;
+                                rowObj.value.x = tx2 + 38;
+                                rowObj.value.y = ty2;
+                                rowObj.value.text = (typeof(role[rowObj.key])==='undefined' ? '' : role[rowObj.key]);
+                            }
+                            关闭人物.x = 人物属性窗口.x + 人物属性窗口.width - 25;
+                            关闭人物.y = 人物属性窗口.y + 11;
+                        };
+                        人物属性窗口.update();
                     }else{
                         人物属性窗口UI.alpha = 1;
                         人物属性窗口.inputEnabled = true;
@@ -194,7 +186,7 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                         if (typeof(武学招式窗口UI)=='undefined') {
                             武学招式窗口UI = game.add.group();
                             场景容器UI.add(武学招式窗口UI);
-                            武学招式窗口 = game.add.image(0,0,'0044');
+                            武学招式窗口 = game.add.image(game.world.centerX - 120,78,'hd_panel_kungfu');
                             武学招式窗口.inputEnabled = true;
                             武学招式窗口.input.enableDrag(false, false);
                             var 解封的武学名称 = [];
@@ -213,7 +205,10 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                             解封的武学名称[i] = game.add.text(武学招式窗口.x + 60, 武学招式窗口.y + Math.floor(i/1)*40 + 40,'');
                                             解封的武学名称组.add(解封的武学名称[i]);
                                             if (我方对象.可用武学[类型][i]!==''&&我方对象.可用武学[类型][i].可用) {
-                                                解封的武学UI.frame = 我方对象.所有武学[类型][i].图标;
+                                                if(!JY2.ArtRegistry.applySkill(解封的武学UI,我方对象.所有武学[类型][i].名称,34)){
+                                                    解封的武学UI.loadTexture('fight_ui');
+                                                    解封的武学UI.frame = 我方对象.所有武学[类型][i].图标;
+                                                }
                                                 解封的武学名称[i].text = 我方对象.可用武学[类型][i].名称;
                                                 kungfu['o_kungfu'].forEach(function(item){
                                                     if(item.名称 == 我方对象.可用武学[类型][i].名称){
@@ -227,7 +222,10 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                         }else{
                                             解封的武学UI组.getChildAt(i).loadTexture('fight_ui');
                                             if (我方对象.可用武学[类型][i]!==''&&我方对象.可用武学[类型][i].可用) {
-                                                解封的武学UI组.getChildAt(i).frame = 我方对象.所有武学[类型][i].图标;
+                                                if(!JY2.ArtRegistry.applySkill(解封的武学UI组.getChildAt(i),我方对象.所有武学[类型][i].名称,34)){
+                                                    解封的武学UI组.getChildAt(i).loadTexture('fight_ui');
+                                                    解封的武学UI组.getChildAt(i).frame = 我方对象.所有武学[类型][i].图标;
+                                                }
                                                 解封的武学名称[i].text = 我方对象.可用武学[类型][i].名称;
                                                 kungfu['o_kungfu'].forEach(function(item){
                                                     if(item.名称 == 我方对象.可用武学[类型][i].名称){
@@ -247,6 +245,8 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                             var 武学_切换 = [];
                             var 武学种类 = '';
                             var 按钮组 = game.add.group();
+                            var 武学分类文字组 = game.add.group();
+                            var 武学分类名称 = ['拳','掌','指','剑','内','关闭'];
                             for (let i = 0; i < 6; i++) {
                                 武学_切换[i] = function(){
                                     switch (i) {
@@ -323,10 +323,10 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                 var 丹药数量UI = game.add.group();
                                 var 丹药数量标记;
                                 var 事件UI = game.add.group();
-                                var 装备按钮文字 = game.add.text(18,5,'装备',{fontSize:12});
-                                var 丹药按钮文字 = game.add.text(78,5,'丹药',{fontSize:12});
-                                var 事件按钮文字 = game.add.text(138,5,'事件',{fontSize:12});
-                                var 背包窗口 = game.add.image(00,00,'0046');
+                                var 装备按钮文字 = game.add.text(18,5,'装备',{fontSize:12,fill:'#5b402a',fontWeight:'bold'});
+                                var 丹药按钮文字 = game.add.text(78,5,'丹药',{fontSize:12,fill:'#5b402a',fontWeight:'bold'});
+                                var 事件按钮文字 = game.add.text(138,5,'事件',{fontSize:12,fill:'#5b402a',fontWeight:'bold'});
+                                var 背包窗口 = game.add.image(game.world.centerX - 132,72,'hd_panel_bag');
 
                                 var 装备名称UI = game.add.group();
                                 var 丹药名称UI = game.add.group();
@@ -350,26 +350,26 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                         btns.children[i].y = 背包窗口.y;
                                     }
                                     for (let i = 0; i < 装备UI.length; i++) {
-                                        装备UI.children[i].x = 背包窗口.x + i%4*50 + 10;
-                                        装备UI.children[i].y = 背包窗口.y + Math.floor(i/4)*55 + 55;
+                                        装备UI.children[i].x = 背包窗口.x + i%4*58 + 18;
+                                        装备UI.children[i].y = 背包窗口.y + Math.floor(i/4)*52 + 78;
                                         装备名称UI.children[i].x = 装备UI.children[i].x;
                                         装备名称UI.children[i].y = 装备UI.children[i].y + 39;
                                     }
                                     for (let i = 0; i < 已装备标记UI.length; i++) {
-                                        已装备标记UI.children[i].x = 背包窗口.x + i%4*50 + 10;
-                                        已装备标记UI.children[i].y = 背包窗口.y + Math.floor(i/4)*55 + 55 + 10;
+                                        已装备标记UI.children[i].x = 背包窗口.x + i%4*58 + 18;
+                                        已装备标记UI.children[i].y = 背包窗口.y + Math.floor(i/4)*52 + 78 + 10;
                                     }
                                     for (let i = 0; i < 丹药UI.length; i++) {
-                                        丹药UI.children[i].x = 背包窗口.x + i%4*50 + 10;
-                                        丹药UI.children[i].y = 背包窗口.y + Math.floor(i/4)*55 + 55;
+                                        丹药UI.children[i].x = 背包窗口.x + i%4*58 + 18;
+                                        丹药UI.children[i].y = 背包窗口.y + Math.floor(i/4)*52 + 78;
                                         丹药数量UI.children[i].x = 背包窗口.x + i%4*50 + 40;
                                         丹药数量UI.children[i].y = 背包窗口.y + Math.floor(i/4)*55 + 75;
                                         丹药名称UI.children[i].x = 丹药UI.children[i].x;
                                         丹药名称UI.children[i].y = 丹药UI.children[i].y + 39;
                                     }
                                     for (let i = 0; i < 事件UI.length; i++) {
-                                        事件UI.children[i].x = 背包窗口.x + i%4*50 + 10;
-                                        事件UI.children[i].y = 背包窗口.y + Math.floor(i/4)*55 + 55;
+                                        事件UI.children[i].x = 背包窗口.x + i%4*58 + 18;
+                                        事件UI.children[i].y = 背包窗口.y + Math.floor(i/4)*52 + 78;
                                         事件名称UI.children[i].x = 事件UI.children[i].x;
                                         事件名称UI.children[i].y = 事件UI.children[i].y + 39;
                                     }
@@ -463,6 +463,7 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                 item['o_item'].forEach(function(item,i){
                                     //if (item.名称!=='空' && item.名称!=='生死符') {
                                         _item = bags.create(i%4*50 + 10,Math.floor(i/4)*55 + 55,'item' + item.名称);
+                                        JY2.ArtRegistry.applyItem(_item,item,42);
                                         var UI对应名称 = game.add.text(_item.x,_item.y+39,item.名称,{fontSize:9});
                                         if (UI对应名称.text=='空') UI对应名称.visible=false;
                                         var 已装备标记 = game.add.text(_item.x,_item.y + 10,'已装备',{fontSize:12,fill:'red'});
@@ -681,12 +682,12 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                 console.log('秘籍');
                                 秘籍窗口UI = game.add.group();
                                 场景容器UI.add(秘籍窗口UI);
-                                var 秘籍窗口 = game.add.image(00,00,'0045');
+                                var 秘籍窗口 = game.add.image(game.world.centerX - 120,78,'hd_panel_book');
                                 var 秘籍图谱 = game.add.group();
                                 var 秘籍名称 = game.add.group();
                                 秘籍窗口.inputEnabled = true;
                                 秘籍窗口.input.enableDrag(false, false);
-                                var 学习点 = game.add.text(秘籍窗口.x + 秘籍窗口.width/2,秘籍窗口.y + 秘籍窗口.height - 23,游戏数据[0].主角.学点,{fontSize:16,fill:'black'});
+                                var 学习点 = game.add.text(秘籍窗口.x + 秘籍窗口.width/2,秘籍窗口.y + 秘籍窗口.height - 28,'学点：' + 游戏数据[0].主角.学点,{fontSize:12,fill:'#5b402a',fontWeight:'bold'}); 学习点.anchor.setTo(0.5);
                                 var x = game.add.text(0,0,'x',{fill:'red',fontSize:36});
                                 x.alpha = 0;
                                 x.inputEnabled = true;
@@ -699,15 +700,16 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                         x.y = 秘籍窗口.y - 12;
                                         学习点.x = 秘籍窗口.x + 秘籍窗口.width/2;
                                         学习点.y = 秘籍窗口.y + 秘籍窗口.height - 23;
-                                        秘籍图谱.children[i].x = 秘籍窗口.x + i%4*60 + 15;
-                                        秘籍图谱.children[i].y = 秘籍窗口.y + Math.floor(i/4)*65 + 50
+                                        秘籍图谱.children[i].x = 秘籍窗口.x + i%4*52 + 18;
+                                        秘籍图谱.children[i].y = 秘籍窗口.y + Math.floor(i/4)*58 + 62
                                         秘籍名称.children[i].x = 秘籍图谱.children[i].x;
                                         秘籍名称.children[i].y = 秘籍图谱.children[i].y + 40;
                                     }
                                 }
                                 item['o_item'].forEach(function(item,i){
                                     if(i>=48){		
-                                        mjtp = 秘籍图谱.create(i%4*60 + 15,Math.floor(i/4)*65 - 12 * 65 + 50,'item' + item.名称);
+                                        mjtp = 秘籍图谱.create(i%4*52 + 18,Math.floor(i/4)*58 - 12 * 58 + 62,'item' + item.名称);
+                                        JY2.ArtRegistry.applyItem(mjtp,item,42);
                                         var 名称UI = game.add.text(mjtp.x,mjtp.y+40,item.名称,{fontSize:12});
                                         秘籍名称.add(名称UI);
                                         mjtp.tag = item.名称;
@@ -716,7 +718,7 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                         mjtp.events.onInputDown.add(function(mjtp){
                                             if(item.修炼层数==5||游戏数据[0].主角.学点==0){return false;}
                                             游戏数据[0].主角.学点 = 主角数据.学点 -=1;
-                                            学习点.text = 游戏数据[0].主角.学点;
+                                            学习点.text = '学点：' + 游戏数据[0].主角.学点;
                                             item.修炼层数++;
                                             if(mjtp.tag!=='北冥神功'){
                                                 if(typeof(item.修炼效果[item.修炼层数]['加生命上限%'])!=='undefined'){
@@ -812,7 +814,7 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                                 break;
                                 case 4:
                                     console.log('存档');
-                                    //记录当前剧情名称、场景索引、主角数据以及经历过且不可重复的剧情即可
+                                    JY2.SaveUI.show(game, 'save');
                                     break;
                                     case 5:
                                         console.log('退出游戏，回到主界面');
@@ -852,8 +854,25 @@ var 主角数据可视化UI = function(game,场景容器UI){//城市界面、 �
                     break;
             }
         }
-        var tabUI = game.add.button(10 + i % 6 * 202/6, 主角属性窗口.y+主角属性窗口.height, '0042', 选项卡_切换[i], this, i, i, i);
-        场景容器UI.add(tabUI);
+        var 选项卡资源 = ['hd_menu_role','hd_menu_kungfu','hd_menu_bag','hd_menu_book','hd_menu_save','hd_menu_leave'];
+        var tabUI = game.add.button(
+            10 + i * 50,
+            主角属性窗口.y + 主角属性窗口.height + 3,
+            选项卡资源[i],
+            选项卡_切换[i],
+            this
+        );
+        tabUI.width = 48;
+        tabUI.height = 58;
+        tabUI.events.onInputOver.add(function(btn){
+            btn.alpha = 0.86;
+            btn.y -= 2;
+        },this);
+        tabUI.events.onInputOut.add(function(btn){
+            btn.alpha = 1;
+            btn.y = 主角属性窗口.y + 主角属性窗口.height + 3;
+        },this);
+        主角属性窗口UI.add(tabUI);
         
     }
 }
